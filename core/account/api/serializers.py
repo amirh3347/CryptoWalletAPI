@@ -1,6 +1,8 @@
 from django.contrib.auth import get_user_model
+from django.contrib.auth.backends import ModelBackend
 
 from rest_framework import serializers
+from rest_framework.exceptions import NotFound
 
 
 User = get_user_model()
@@ -39,3 +41,31 @@ class RegisterSerializer(serializers.ModelSerializer):
     def create(self, validated_data):
         validated_data.pop("confirm_password")
         return User.objects.create_user(**validated_data)
+
+
+class LoginSerializer(serializers.ModelSerializer, ModelBackend):
+    username = serializers.CharField(required=True, min_length=3, max_length=30)
+    password = serializers.CharField(required=True)
+
+    class Meta:
+        model = User
+        fields = ["username", 'password']
+
+
+    def validate(self, attrs):
+        attrs["user"] = None
+        username = attrs.get('username')
+        password = attrs.get('password')
+
+        try:
+            user = User.objects.get(is_active=True, username=username)
+
+        except:
+            raise NotFound("User not found")
+
+        user = self.authenticate(request=self.context["request"], username=username, password=password)
+        if not user:
+            raise serializers.ValidationError("authentication failed please check your inputs")
+        else:
+            attrs["user"] = user
+        return super().validate(attrs)
