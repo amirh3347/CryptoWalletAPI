@@ -5,6 +5,7 @@ from rest_framework_simplejwt.views import TokenRefreshView
 from account.api.views import RegisterViewSet, LoginViewSet
 
 
+app_name = "account"
 
 urlpatterns = [
 
