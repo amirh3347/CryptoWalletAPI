@@ -44,11 +44,13 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
 
     'rest_framework',
+    'corsheaders',
 ]
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
+    'corsheaders.middleware.CorsMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
@@ -143,3 +145,11 @@ REST_FRAMEWORK = {
 }
 if config("DJANGO_DISABLE_BROWSEABLE_API", cast=bool, default=False):
     REST_FRAMEWORK["DEFAULT_RENDERER_CLASSES"] = ["rest_framework.renderers.JSONRenderer",]
+
+
+CORS_ALLOW_CREDENTIALS = True
+CORS_ALLOWED_ORIGINS = config(
+    "DJANGO_CORS_ALLOWED_ORIGINS",
+    cast=lambda v: [s.strip() for s in v.split(",")],
+    default="http://localhost:8000,http://127.0.0.1:8000",
+)
