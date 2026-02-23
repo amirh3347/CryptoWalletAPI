@@ -45,6 +45,7 @@ INSTALLED_APPS = [
 
     'rest_framework',
     'corsheaders',
+    'drf_spectacular',
 ]
 
 MIDDLEWARE = [
@@ -141,7 +142,8 @@ REST_FRAMEWORK = {
     ],
     "DEFAULT_AUTHENTICATION_CLASSES": [
         "rest_framework_simplejwt.authentication.JWTAuthentication",
-    ]
+    ],
+    'DEFAULT_SCHEMA_CLASS': 'drf_spectacular.openapi.AutoSchema'
 }
 if config("DJANGO_DISABLE_BROWSEABLE_API", cast=bool, default=False):
     REST_FRAMEWORK["DEFAULT_RENDERER_CLASSES"] = ["rest_framework.renderers.JSONRenderer",]
@@ -153,3 +155,16 @@ CORS_ALLOWED_ORIGINS = config(
     cast=lambda v: [s.strip() for s in v.split(",")],
     default="http://localhost:8000,http://127.0.0.1:8000",
 )
+
+
+SHOW_SWAGGER = config("DJANGO_SHOW_SWAGGER", cast=bool, default=True)
+SPECTACULAR_SETTINGS = {
+    'TITLE': 'crypto wallet API',
+    'DESCRIPTION': 'crypto wallet API docs.',
+    'VERSION': '1.0.0',
+    'CONTACT': {
+        "name": "Amir Hossein",
+        "email": "amirh3347@gmail.com"
+    },
+    'SCHEMA_PATH_PREFIX': '/api/v1',
+}
