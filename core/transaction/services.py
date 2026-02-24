@@ -8,6 +8,7 @@ from rest_framework.exceptions import ValidationError
 
 from wallet.models import Wallet
 from transaction.models import TransactionLedger, TransactionType
+from transaction.tasks import look_for_high_amount_transactions
 
 
 def deposit(wallet: Wallet, amount: Decimal, idempotency_key: uuid.UUID) -> TransactionLedger:
@@ -105,4 +106,5 @@ def transfer(wallet_from: Wallet, wallet_to: Wallet, amount: Decimal, idempotenc
             transaction_type=TransactionType.TRANSFER,
             idempotency_key=idempotency_key,
         )
+        look_for_high_amount_transactions.delay(ledger.id)
         return ledger
