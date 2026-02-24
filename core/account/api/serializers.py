@@ -69,3 +69,18 @@ class LoginSerializer(serializers.ModelSerializer, ModelBackend):
         else:
             attrs["user"] = user
         return super().validate(attrs)
+
+
+class LoginResponseSerializer(serializers.Serializer):
+    access_token = serializers.CharField()
+    refresh_token = serializers.CharField()
+    username = serializers.CharField()
+
+
+class RefreshDebugResponseSerializer(serializers.Serializer):
+    access = serializers.CharField()
+
+
+class RefreshProdResponseSerializer(serializers.Serializer):
+    access = serializers.CharField()
+    refresh = serializers.CharField()
