@@ -22,6 +22,7 @@ from drf_spectacular.views import SpectacularAPIView, SpectacularRedocView, Spec
 
 urlpatterns = [
     path("api/account/", include("account.api.urls")),
+    path("api/wallets/", include("wallet.api.urls")),
 ]
 
 if settings.SHOW_SWAGGER:
