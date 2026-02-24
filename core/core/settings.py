@@ -50,6 +50,7 @@ INSTALLED_APPS = [
     'drf_spectacular',
 
     'account.apps.AccountConfig',
+    'wallet.apps.WalletConfig',
 ]
 
 MIDDLEWARE = [
